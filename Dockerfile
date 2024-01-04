@@ -1,7 +1,7 @@
 FROM maven:alpine as maven
 
 COPY ./ ./
-RUN mvn package -DskipTests
+
 
 FROM maven:alpine
 
