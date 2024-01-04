@@ -4,6 +4,6 @@ WORKDIR /app
 
 FROM maven:alpine
 WORKDIR /app
-RUN mvn clean package
+RUN mvn clean package -e
 # copying the the helloworld target war package from the target to destincation tomcat Container directory
 COPY app/target/helloworld-1.5-SNAPSHOT.war /app/usr/local/tomcat/webapps/
