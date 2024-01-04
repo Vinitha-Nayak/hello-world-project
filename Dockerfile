@@ -1,7 +1,7 @@
 FROM maven:alpine as maven
 WORKDIR /app
 COPY ./ ./
-RUN mvn package -DskipTests
+
 
 FROM maven:alpine
 WORKDIR /app
