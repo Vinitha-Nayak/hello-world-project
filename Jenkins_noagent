@@ -18,5 +18,37 @@ pipeline {
         echo "deployed on tomcat server"
       }
     }
+    pipeline {
+  agent none
+  stages {
+    stage('build war file ') {
+      agent {
+        docker { image 'maven:3.8.1-adoptopenjdk-11' }
+      }
+      steps {
+        sh 'mvn clean package'
+      }
+    }
+    stage('deploy on tomcat') {
+      agent {
+        docker { image 'tomcat:8.5.97-jdk8-corretto-al2' }
+      }
+      steps {
+        deploy adapters: [tomcat9(credentialsId: 'tomcat_admin', path: '', url: 'http://172.31.19.29:8080/')], contextPath: null, war: '**/*.war'
+        echo "deployed on tomcat server"
+      }
+    }
+    stage('build docker') {
+      steps {
+        echo 'build docker file'
+        sh 'docker build -t hello-world-project .'
+        echo 'tagging image'
+        sh 'docker tag hello-world-project vinitha25/hello-world-project'
+      }
+    }
+    
+  }
+}
+
   }
 }
