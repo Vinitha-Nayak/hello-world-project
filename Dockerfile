@@ -1,9 +1,9 @@
-# pull the tomcat docker image from docker hub
-FROM tomcat:latest
-
+FROM maven:alpine as maven
+WORKDIR /app
+COPY ./ ./
+RUN mvn package -DskipTests
 
 FROM maven:alpine
-
-RUN mvn clean package -e
-# copying the the helloworld target war package from the target to destincation tomcat Container directory
-COPY --from=maven /target/helloworld-1.5-SNAPSHOT.war /usr/local/tomcat/webapps/
+WORKDIR /app
+COPY --from=maven /app/target/helloworld-1.5-SNAPSHOT.war /app//usr/local/tomcat/webapps/
+ENTRYPOINT ["java", "-war", "/app/helloworld.war"]  
